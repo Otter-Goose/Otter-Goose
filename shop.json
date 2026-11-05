@@ -1,0 +1,12 @@
+{
+  "currency": "GBP",
+  "email": "goose_co26@yahoo.com",
+  "shipping": 2,
+  "freeShippingOver": 0,
+  "shipToCountries": ["GB"],
+  "products": [
+    { "id": "slip-lead", "name": "Slip Lead", "tag": "Dog lead", "price": 15,
+      "description": "110 cm long, thin and lightweight, and small enough to fit in a pocket. Strong, non-stretch cord keeps a secure connection between you and your dog. A metal ring lets the slip loosen easily to help prevent choking, and a rope stopper lets you set the size of the loop.",
+      "image": "" }
+  ]
+}

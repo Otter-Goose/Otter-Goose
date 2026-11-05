@@ -1,0 +1,310 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Otter &amp; Goose</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Gloock&family=Figtree:wght@400;500;600&display=swap">
+<style>
+/* Layout: four hash-routed pages (home, products, basket, checkout) under one sticky green header */
+:root{
+  --bg:#EEF1EC; --surface:#FFFFFF; --ink:#16241B; --muted:#55645A;
+  --green:#1E3B2A; --green-2:#2C5139; --line:#D3DBD4; --on-green:#F1F4EF; --brass:#9A7536; --bad:#A33A2C;
+  --display:"Gloock", Georgia, "Times New Roman", serif;
+  --body:"Figtree", system-ui, -apple-system, "Segoe UI", sans-serif;
+}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){
+  --bg:#101A14; --surface:#16231B; --ink:#E6ECE6; --muted:#9DAEA2;
+  --green:#1E3B2A; --green-2:#3D6B4C; --line:#2A3B30; --on-green:#F1F4EF; --brass:#CFA864; --bad:#E07A6A; color-scheme:dark}}
+:root[data-theme="dark"]{
+  --bg:#101A14; --surface:#16231B; --ink:#E6ECE6; --muted:#9DAEA2;
+  --green:#1E3B2A; --green-2:#3D6B4C; --line:#2A3B30; --on-green:#F1F4EF; --brass:#CFA864; --bad:#E07A6A; color-scheme:dark}
+
+*{box-sizing:border-box}
+body{margin:0}
+img{max-width:100%}
+[hidden]{display:none!important}
+body{background:var(--bg);color:var(--ink);font-family:var(--body);font-size:16px;line-height:1.6}
+.wrap{max-width:1080px;margin:0 auto;padding-left:max(16px, env(safe-area-inset-left, 0px));padding-right:max(16px, env(safe-area-inset-right, 0px))}
+h1,h2,h3{font-family:var(--display);font-weight:400;line-height:1.1;text-wrap:balance;margin:0}
+p{margin:0}
+a{color:inherit}
+:focus-visible{outline:2px solid var(--brass);outline-offset:3px}
+.eyebrow{font-size:.75rem;letter-spacing:.14em;text-transform:uppercase;color:var(--brass);font-weight:600}
+.hero .eyebrow{color:#CFA864}
+
+/* Header */
+body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top,0px);z-index:10;background:var(--green)}
+header{position:sticky;top:env(safe-area-inset-top,0px);z-index:9;background:var(--green);color:var(--on-green)}
+header .wrap{display:flex;align-items:center;justify-content:space-between;gap:12px;padding-block:12px}
+.brand{display:flex;align-items:center;gap:10px;text-decoration:none;font-family:var(--display);font-size:1.3rem;white-space:nowrap}
+.brand svg{width:32px;height:32px;flex:none}
+nav{display:flex;gap:4px;align-items:center;font-size:.92rem}
+nav a{text-decoration:none;padding:8px 10px;border-radius:2px;opacity:.85}
+nav a:hover{opacity:1}
+nav a.on{opacity:1;box-shadow:inset 0 -2px 0 #CFA864}
+.count{display:inline-grid;place-items:center;min-width:20px;height:20px;padding:0 6px;margin-left:4px;border-radius:10px;background:#CFA864;color:#1E3B2A;font-size:.75rem;font-weight:600;font-variant-numeric:tabular-nums}
+@media (max-width:520px){.brand span{display:none} nav a{padding:8px 7px}}
+
+/* Buttons */
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;font:600 1rem var(--body);padding:13px 24px;border-radius:2px;border:1px solid transparent;cursor:pointer;text-decoration:none;transition:background .15s, transform .15s}
+.btn-light{background:var(--on-green);color:#1E3B2A}
+.btn-light:hover{transform:translateY(-1px)}
+.btn-green{background:var(--green);color:var(--on-green)}
+.btn-green:hover{background:var(--green-2)}
+.btn-line{background:transparent;color:var(--ink);border-color:var(--line)}
+.btn-ghost-light{background:transparent;color:var(--on-green);border-color:rgba(241,244,239,.4)}
+.btn.full{width:100%}
+.btn[aria-disabled="true"]{opacity:.5;cursor:not-allowed;transform:none}
+
+/* Hero (home) */
+.hero{background:var(--green);color:var(--on-green)}
+.hero .wrap{display:grid;grid-template-columns:1.1fr 1fr;gap:40px;align-items:center;padding-block:56px 64px}
+.hero h1{font-size:clamp(2.4rem,6vw,4.2rem);margin:12px 0 16px}
+.hero p.lede{max-width:46ch;opacity:.9;font-size:1.05rem}
+.hero .actions{display:flex;gap:12px;flex-wrap:wrap;margin-top:26px}
+.art{aspect-ratio:4/5;max-width:100%;background:var(--green-2);display:grid;place-items:center;overflow:hidden}
+.art img{width:100%;height:100%;object-fit:cover}
+@media (max-width:760px){.hero .wrap{grid-template-columns:1fr;padding-block:36px 44px}.hero .art{aspect-ratio:4/3}}
+
+.perks{display:grid;grid-template-columns:repeat(3,1fr);gap:20px;padding-block:40px;border-bottom:1px solid var(--line)}
+.perks div{min-width:0}
+.perks strong{display:block;font-family:var(--display);font-weight:400;font-size:1.2rem;margin-bottom:4px}
+.perks span{color:var(--muted);font-size:.93rem}
+@media (max-width:640px){.perks{grid-template-columns:1fr}}
+
+section.block{padding-block:56px}
+.head{display:flex;justify-content:space-between;align-items:end;gap:16px;flex-wrap:wrap;margin-bottom:28px}
+.head h1,.head h2{font-size:clamp(2rem,4.5vw,2.8rem)}
+.head p{color:var(--muted);max-width:44ch}
+
+/* Home feature sections */
+.feature{display:grid;grid-template-columns:200px 1fr;gap:32px}
+.feature > div{min-width:0}
+.feature h2{font-size:clamp(1.8rem,4.2vw,2.6rem);margin-bottom:16px;max-width:20ch}
+.feature p{color:var(--muted);max-width:60ch;margin-bottom:12px;font-size:1.05rem}
+.band{background:var(--surface);border-block:1px solid var(--line)}
+@media (max-width:700px){.feature{grid-template-columns:1fr;gap:10px}}
+
+/* Product cards */
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:20px}
+.card{background:var(--surface);border:1px solid var(--line);display:flex;flex-direction:column;min-width:0}
+.card .art{aspect-ratio:1}
+.card .body{padding:18px;display:flex;flex-direction:column;gap:8px;flex:1}
+.card h3{font-size:1.35rem}
+.card .desc{color:var(--muted);font-size:.95rem;flex:1}
+.card .row{display:flex;justify-content:space-between;align-items:center;gap:12px;margin-top:6px}
+.money{font-family:var(--display);font-size:1.3rem;font-variant-numeric:tabular-nums}
+
+/* Basket */
+.layout{display:grid;grid-template-columns:1.6fr 1fr;gap:28px;align-items:start}
+@media (max-width:820px){.layout{grid-template-columns:1fr}}
+.lines{background:var(--surface);border:1px solid var(--line)}
+.line{display:grid;grid-template-columns:72px 1fr auto;gap:16px;align-items:center;padding:16px;border-bottom:1px solid var(--line)}
+.line:last-child{border-bottom:0}
+.line .art{aspect-ratio:1;width:72px}
+.line .info{min-width:0}
+.line .info strong{font-family:var(--display);font-weight:400;font-size:1.15rem;display:block}
+.line .info small{color:var(--muted)}
+.qty{display:inline-flex;align-items:center;border:1px solid var(--line);margin-top:8px}
+.qty button{width:34px;height:34px;border:0;background:transparent;color:var(--ink);font-size:1.1rem;cursor:pointer}
+.qty span{min-width:30px;text-align:center;font-variant-numeric:tabular-nums}
+.remove{background:none;border:0;color:var(--muted);font:inherit;font-size:.85rem;text-decoration:underline;cursor:pointer;margin-left:10px}
+.line .total{font-variant-numeric:tabular-nums;font-weight:600;text-align:right}
+.summary{background:var(--surface);border:1px solid var(--line);padding:22px;display:flex;flex-direction:column;gap:12px;position:sticky;top:calc(80px + env(safe-area-inset-top,0px))}
+.summary h2{font-size:1.5rem}
+.sumrow{display:flex;justify-content:space-between;font-variant-numeric:tabular-nums}
+.sumrow.big{font-family:var(--display);font-size:1.4rem;border-top:1px solid var(--line);padding-top:12px}
+.note{color:var(--muted);font-size:.85rem}
+.empty{background:var(--surface);border:1px solid var(--line);padding:48px 24px;text-align:center;display:flex;flex-direction:column;gap:14px;align-items:center}
+.empty h2{font-size:1.8rem}
+
+/* Checkout */
+form{display:grid;gap:14px}
+.field{display:grid;gap:6px;min-width:0}
+.field label{font-size:.85rem;font-weight:600}
+.field input,.field textarea{font:inherit;padding:12px;border:1px solid var(--line);background:var(--bg);color:var(--ink);border-radius:2px;width:100%}
+.two{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+@media (max-width:520px){.two{grid-template-columns:1fr}}
+.err{color:var(--bad);font-size:.85rem}
+.steps{display:flex;gap:8px;font-size:.8rem;color:var(--muted);margin-bottom:18px;flex-wrap:wrap}
+.steps b{color:var(--ink)}
+.paylist{display:grid;gap:10px}
+.payitem{display:flex;justify-content:space-between;align-items:center;gap:12px;padding:12px;border:1px solid var(--line);flex-wrap:wrap}
+.secure{font-size:.8rem;color:var(--muted);display:flex;gap:6px;align-items:center}
+
+footer{background:var(--green);color:var(--on-green);margin-top:56px}
+footer .wrap{padding-block:26px;display:flex;justify-content:space-between;flex-wrap:wrap;gap:12px;font-size:.85rem;opacity:.85}
+.toast{position:fixed;left:50%;bottom:calc(20px + env(safe-area-inset-bottom,0px));transform:translateX(-50%);background:var(--ink);color:var(--bg);padding:10px 16px;font-size:.9rem;border-radius:2px;z-index:20}
+@media (prefers-reduced-motion:reduce){*{transition:none!important}}
+</style>
+</head>
+<body>
+
+<!-- Products, prices and delivery live in shop.json.
+     The checkout server reads the same file, so prices can't be changed by a customer. -->
+<script>
+let SHOP = { currency:"GBP", email:"", shipping:0, freeShippingOver:0, products:[] };
+</script>
+
+<header>
+  <div class="wrap">
+    <a class="brand" href="#home" aria-label="Otter & Goose home">
+      <svg viewBox="0 0 40 40" aria-hidden="true"><circle cx="20" cy="20" r="18.5" fill="none" stroke="currentColor" stroke-width="1.4"/><text x="20" y="25.5" text-anchor="middle" font-family="Gloock, Georgia, serif" font-size="15" fill="currentColor">O&amp;G</text></svg>
+      <span>Otter &amp; Goose</span>
+    </a>
+    <nav>
+      <a href="#home" data-r="home">Home</a>
+      <a href="#products" data-r="products">Products</a>
+      <a href="#basket" data-r="basket">Basket<span class="count" id="count">0</span></a>
+    </nav>
+  </div>
+</header>
+
+<main id="view"></main>
+
+<footer>
+  <div class="wrap">
+    <span>© <span id="yr"></span> Otter &amp; Goose · <span id="foot-email"></span></span>
+    <span>Payments processed securely by Stripe</span>
+  </div>
+</footer>
+<div class="toast" id="toast" hidden></div>
+
+<script>
+(function(){
+  const $ = s => document.querySelector(s);
+  const view = $('#view');
+  const fmt = n => new Intl.NumberFormat('en-GB',{style:'currency',currency:SHOP.currency}).format(n);
+  const esc = s => String(s).replace(/[&<>"]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+  const emblem = '<svg viewBox="0 0 200 200" width="58%" aria-hidden="true"><circle cx="100" cy="100" r="92" fill="none" stroke="#F1F4EF" stroke-opacity=".55" stroke-width="2"/><circle cx="100" cy="100" r="80" fill="none" stroke="#F1F4EF" stroke-opacity=".25"/><text x="100" y="118" text-anchor="middle" font-family="Gloock, Georgia, serif" font-size="58" fill="#F1F4EF">O&amp;G</text></svg>';
+  const art = p => '<div class="art">'+(p.image ? '<img src="'+esc(p.image)+'" alt="'+esc(p.name)+'">' : emblem)+'</div>';
+  const byId = id => SHOP.products.find(p => p.id === id);
+  const toast = msg => { const t=$('#toast'); t.textContent=msg; t.hidden=false; clearTimeout(t._h); t._h=setTimeout(()=>t.hidden=true,2600); };
+
+  /* ---------- Basket (saved in this browser) ---------- */
+  let basket = {};
+  try { basket = JSON.parse(localStorage.getItem('og-basket')||'{}') || {}; } catch(e){ basket = {}; }
+  const save = () => { try { localStorage.setItem('og-basket', JSON.stringify(basket)); } catch(e){} updateCount(); };
+  const items = () => Object.entries(basket).map(([id,q]) => ({p:byId(id), q})).filter(x => x.p && x.q > 0);
+  const subtotal = () => items().reduce((s,x) => s + x.p.price*x.q, 0);
+  const delivery = () => { const s = subtotal(); if (!s) return 0; return (SHOP.freeShippingOver && s >= SHOP.freeShippingOver) ? 0 : SHOP.shipping; };
+  function add(id){ basket[id] = (basket[id]||0) + 1; save(); toast(byId(id).name + ' added to basket'); }
+  function setQty(id,q){ if (q <= 0) delete basket[id]; else basket[id] = Math.min(q, 99); save(); render(); }
+  function updateCount(){ $('#count').textContent = items().reduce((s,x)=>s+x.q,0); }
+
+  /* ---------- Pages ---------- */
+  function card(p){
+    return '<article class="card">'+art(p)+'<div class="body"><span class="eyebrow">'+esc(p.tag||'')+'</span><h3>'+esc(p.name)+'</h3><p class="desc">'+esc(p.description)+'</p><div class="row"><span class="money">'+fmt(p.price)+'</span></div><button class="btn btn-green full" type="button" data-add="'+esc(p.id)+'">Add to basket</button></div></article>';
+  }
+
+  const pages = {
+    home(){
+      const f = SHOP.products[0];
+      return '<section class="hero"><div class="wrap"><div>'+
+        '<div class="eyebrow">Otter &amp; Goose</div><h1>Stay connected on every walk</h1>'+
+        '<p class="lede">A light, strong slip lead that keeps you and your dog in step, and folds away into the smallest pocket when you\'re done.</p>'+
+        '<div class="actions"><a class="btn btn-light" href="#products">Shop the '+esc(f ? f.name : 'range')+'</a></div>'+
+        '</div>'+art(f||{name:''})+'</div></section>'+
+        '<section class="block"><div class="wrap feature">'+
+          '<div class="eyebrow">Connection</div>'+
+          '<div><h2>A steady line between you and your dog</h2>'+
+          '<p>The cord is strong and doesn\'t stretch, so every small signal reaches your dog clearly. No slack, no bounce, just a direct connection you can both feel.</p>'+
+          '<p>A metal ring lets the slip loosen the moment the pressure stops, helping to prevent choking. A rope stopper lets you set the loop to the right size for your dog.</p></div>'+
+        '</div></section>'+
+        '<section class="block band"><div class="wrap feature">'+
+          '<div class="eyebrow">Pocket-sized</div>'+
+          '<div><h2>110 cm of lead that fits in your pocket</h2>'+
+          '<p>Thin and lightweight, it rolls up small enough for a jacket or jeans pocket. Keep one on you for every walk, car trip or field, without carrying a bulky lead around.</p></div>'+
+        '</div></section>'+
+        '<div class="wrap"><div class="perks">'+
+          '<div><strong>Delivery</strong><span>'+(SHOP.freeShippingOver ? 'Free on orders over '+fmt(SHOP.freeShippingOver)+'. Otherwise '+fmt(SHOP.shipping)+'.' : fmt(SHOP.shipping)+' flat rate across the UK.')+'</span></div>'+
+          '<div><strong>Secure payment</strong><span>Card, Apple Pay and Google Pay through Stripe.</span></div>'+
+          '<div><strong>Ready to go</strong><span><a href="#products">See the Slip Lead and order</a></span></div>'+
+        '</div></div>';
+    },
+
+    products(){
+      return '<section class="block"><div class="wrap"><div class="head"><h1>Products</h1><p>Slip leads for everyday walks, ready to order.</p></div><div class="grid">'+SHOP.products.map(card).join('')+'</div></div></section>';
+    },
+
+    basket(){
+      const list = items();
+      if (!list.length) return '<section class="block"><div class="wrap"><div class="empty"><h2>Your basket is empty</h2><p class="note">Add a product and it will appear here.</p><a class="btn btn-green" href="#products">Browse products</a></div></div></section>';
+      return '<section class="block"><div class="wrap"><div class="head"><h1>Basket</h1></div><div class="layout">'+
+        '<div class="lines">'+list.map(({p,q}) =>
+          '<div class="line">'+art(p)+'<div class="info"><strong>'+esc(p.name)+'</strong><small>'+fmt(p.price)+' each</small><div><span class="qty"><button type="button" aria-label="Fewer" data-q="'+esc(p.id)+'" data-d="-1">−</button><span>'+q+'</span><button type="button" aria-label="More" data-q="'+esc(p.id)+'" data-d="1">+</button></span><button class="remove" type="button" data-rm="'+esc(p.id)+'">Remove</button></div></div><div class="total">'+fmt(p.price*q)+'</div></div>'
+        ).join('')+'</div>'+
+        summary('<a class="btn btn-green full" href="#checkout">Go to checkout</a><a class="btn btn-line full" href="#products">Keep shopping</a>')+
+        '</div></div></section>';
+    },
+
+    checkout(){
+      const list = items();
+      if (!list.length) return pages.basket();
+      return '<section class="block"><div class="wrap"><div class="steps"><span>Basket</span>›<b>Checkout</b>›<span>Pay on Stripe</span></div><div class="head"><h1>Checkout</h1></div><div class="layout">'+
+        '<div class="lines" style="padding:22px;display:grid;gap:14px">'+
+          '<h2 style="font-size:1.6rem">Pay securely with Stripe</h2>'+
+          '<p class="note">You\'ll enter your email, delivery address and card on Stripe\'s secure page. Card, Apple Pay and Google Pay are accepted.</p>'+
+          '<button class="btn btn-green full" type="button" id="pay">Pay '+fmt(subtotal()+delivery())+'</button>'+
+          '<p class="err" id="pay-err" hidden></p>'+
+          '<p class="secure"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="4" y="11" width="16" height="10" rx="1"/><path d="M8 11V7a4 4 0 0 1 8 0v4"/></svg>Otter &amp; Goose never sees your card details.</p>'+
+          '<a class="btn btn-line full" href="#basket">Back to basket</a>'+
+        '</div>'+
+        summary('')+
+        '</div></div></section>';
+    }
+  };
+
+  function summary(extra){
+    const s = subtotal(), d = delivery();
+    const gap = SHOP.freeShippingOver && d ? '<p class="note">Spend '+fmt(SHOP.freeShippingOver - s)+' more for free delivery.</p>' : '';
+    return '<aside class="summary"><h2>Order summary</h2>'+
+      items().map(({p,q}) => '<div class="sumrow"><span>'+esc(p.name)+' × '+q+'</span><span>'+fmt(p.price*q)+'</span></div>').join('')+
+      '<div class="sumrow"><span>Delivery</span><span>'+(d ? fmt(d) : 'Free')+'</span></div>'+gap+
+      '<div class="sumrow big"><span>Total</span><span>'+fmt(s+d)+'</span></div>'+extra+'</aside>';
+  }
+
+  async function pay(btn){
+    const err = $('#pay-err'); err.hidden = true;
+    btn.setAttribute('aria-disabled','true'); btn.textContent = 'Opening Stripe…';
+    try {
+      const r = await fetch('/api/checkout', { method:'POST', headers:{'Content-Type':'application/json'},
+        body: JSON.stringify({ items: items().map(({p,q}) => ({ id:p.id, qty:q })) }) });
+      const data = await r.json().catch(() => ({}));
+      if (!r.ok || !data.url) throw new Error(data.error || 'Checkout is not available yet.');
+      window.location.href = data.url;
+    } catch(e){
+      err.textContent = (e && e.message && e.message !== 'Failed to fetch') ? e.message : 'Checkout works once the site is live on Netlify.';
+      err.hidden = false;
+      btn.removeAttribute('aria-disabled'); btn.textContent = 'Pay ' + fmt(subtotal()+delivery());
+    }
+  }
+
+  /* ---------- Router ---------- */
+  const ROUTES = ['home','products','basket','checkout'];
+  function render(){
+    const r = ROUTES.includes(location.hash.slice(1)) ? location.hash.slice(1) : 'home';
+    view.innerHTML = pages[r]();
+    document.querySelectorAll('nav a').forEach(a => a.classList.toggle('on', a.dataset.r === r || (r==='checkout' && a.dataset.r==='basket')));
+    updateCount();
+  }
+  window.addEventListener('hashchange', () => { render(); window.scrollTo(0,0); });
+
+  view.addEventListener('click', e => {
+    const t = e.target.closest('button, a'); if (!t) return;
+    if (t.dataset.add) add(t.dataset.add);
+    else if (t.dataset.q) setQty(t.dataset.q, (basket[t.dataset.q]||0) + Number(t.dataset.d));
+    else if (t.dataset.rm) setQty(t.dataset.rm, 0);
+    else if (t.id === 'pay' && t.getAttribute('aria-disabled') !== 'true') pay(t);
+  });
+  $('#yr').textContent = new Date().getFullYear();
+  fetch('shop.json').then(r => r.json()).then(d => { SHOP = d; })
+    .catch(() => { view.innerHTML = '<section class="block"><div class="wrap"><p class="err">The product list could not be loaded. Check shop.json.</p></div></section>'; })
+    .finally(() => { $('#foot-email').textContent = SHOP.email; if (SHOP.products.length) render(); });
+})();
+</script>
+
+</body>
+</html>
